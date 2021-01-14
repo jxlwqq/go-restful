@@ -1,10 +1,10 @@
 package post
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/jxlwqq/go-restful/internal/auth"
+	"github.com/jxlwqq/go-restful/internal/response"
 	"github.com/jxlwqq/go-restful/pkg/database"
 	"github.com/jxlwqq/go-restful/pkg/log"
 	"net/http"
@@ -26,7 +26,7 @@ func (res resource) get(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 	post, _ := res.service.Get(id)
-	json.NewEncoder(w).Encode(post)
+	response.New(w, post, http.StatusOK)
 }
 
 func (res resource) query(w http.ResponseWriter, r *http.Request) {
