@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"github.com/jxlwqq/go-restful/internal/config"
+	"github.com/jxlwqq/go-restful/internal/response"
 	"github.com/jxlwqq/go-restful/pkg/database"
 	"github.com/jxlwqq/go-restful/pkg/log"
 	"net/http"
@@ -31,7 +32,7 @@ func (res resource) login(w http.ResponseWriter, r *http.Request) {
 	res.logger.With("mobile", req.Mobile, "code", req.Code).Info()
 	token, _ := res.service.Login(req.Mobile, req.Code)
 
-	json.NewEncoder(w).Encode(struct {
+	response.New(w, struct {
 		Token string `json:"token"`
-	}{token})
+	}{token}, http.StatusOK)
 }
