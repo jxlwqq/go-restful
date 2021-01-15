@@ -19,7 +19,7 @@ func Write(w http.ResponseWriter, data interface{}, status int) http.ResponseWri
 		Message: http.StatusText(status),
 		Data:    data,
 	}
-	json.NewEncoder(w).Encode(res)
+	_ = json.NewEncoder(w).Encode(res)
 
 	return w
 }
@@ -50,6 +50,6 @@ func WriteWithCode(w http.ResponseWriter, data interface{}, code int, message st
 		Message: message,
 		Data:    data,
 	}
-	json.NewEncoder(w).Encode(res)
+	_ = json.NewEncoder(w).Encode(res)
 	return w
 }

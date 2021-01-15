@@ -27,7 +27,7 @@ func (res resource) login(w http.ResponseWriter, r *http.Request) {
 		Code   string `json:"code"`
 	}
 
-	json.NewDecoder(r.Body).Decode(&req)
+	_ = json.NewDecoder(r.Body).Decode(&req)
 
 	res.logger.With("mobile", req.Mobile, "code", req.Code).Info()
 	token, _ := res.service.Login(req.Mobile, req.Code)

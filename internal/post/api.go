@@ -36,7 +36,7 @@ func (res resource) Query(w http.ResponseWriter, r *http.Request) {
 
 func (res resource) Create(w http.ResponseWriter, r *http.Request) {
 	req := CreateRequest{}
-	json.NewDecoder(r.Body).Decode(&req)
+	_ = json.NewDecoder(r.Body).Decode(&req)
 	post, _ := res.service.Create(req)
 	response.Write(w, post, http.StatusCreated)
 }

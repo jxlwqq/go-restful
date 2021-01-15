@@ -15,6 +15,6 @@ func TestHealthz(t *testing.T) {
 	Healthz(recorder, request)
 	assert.Equal(t, recorder.Code, http.StatusOK)
 	res := response.Response{}
-	json.NewDecoder(recorder.Body).Decode(&res)
+	_ = json.NewDecoder(recorder.Body).Decode(&res)
 	assert.Equal(t, res.Code, http.StatusOK)
 }
