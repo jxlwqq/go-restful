@@ -32,7 +32,7 @@ func (res resource) login(w http.ResponseWriter, r *http.Request) {
 	res.logger.With("mobile", req.Mobile, "code", req.Code).Info()
 	token, _ := res.service.Login(req.Mobile, req.Code)
 
-	response.New(w, struct {
+	response.Write(w, struct {
 		Token string `json:"token"`
 	}{token}, http.StatusOK)
 }

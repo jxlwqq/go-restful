@@ -1,6 +1,7 @@
 package post
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/jxlwqq/go-restful/internal/auth"
@@ -13,22 +14,29 @@ import (
 func RegisterHandlers(r *mux.Router, db *database.DB, logger *log.Logger, authMiddleware auth.Middleware) {
 	res := resource{service: NewService(db)}
 	s := r.PathPrefix("").Subrouter()
-	s.HandleFunc("/posts/{id}", res.get).Methods(http.MethodGet)
+	s.HandleFunc("/posts/{id}", res.Get).Methods(http.MethodGet)
 	s.Use(authMiddleware.Handler)
-	r.HandleFunc("/posts", res.query).Methods(http.MethodGet)
+	r.HandleFunc("/posts", res.Query).Methods(http.MethodGet)
 }
 
 type resource struct {
 	service Service
 }
 
-func (res resource) get(w http.ResponseWriter, r *http.Request) {
+func (res resource) Get(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 	post, _ := res.service.Get(id)
-	response.New(w, post, http.StatusOK)
+	response.Write(w, post, http.StatusOK)
 }
 
-func (res resource) query(w http.ResponseWriter, r *http.Request) {
+func (res resource) Query(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Query")
+}
+
+func (res resource) Create(w http.ResponseWriter, r *http.Request) {
+	req := CreateRequest{}
+	json.NewDecoder(r.Body).Decode(&req)
+	post, _ := res.service.Create(req)
+	response.Write(w, post, http.StatusCreated)
 }

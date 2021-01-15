@@ -10,13 +10,18 @@ type Service interface {
 	Count() (int, error)
 	Query(offset, limit int) ([]entity.Post, error)
 	Create(req CreateRequest) (entity.Post, error)
-	Update()
-	Delete()
+	Update(id string, req UpdateRequest) (entity.Post, error)
+	Delete(id string) (entity.Post, error)
 }
 
 type CreateRequest struct {
-	Name string
-	Body string
+	Title string `json:"title"`
+	Body  string `json:"body"`
+}
+
+type UpdateRequest struct {
+	Title string `json:"title"`
+	Body  string `json:"body"`
 }
 
 func (r CreateRequest) Validate() error {
@@ -42,17 +47,34 @@ func (s service) Query(offset, limit int) ([]entity.Post, error) {
 }
 
 func (s service) Create(req CreateRequest) (post entity.Post, err error) {
-	panic("implement me")
+	post = entity.Post{
+		Title: req.Title,
+		Body:  req.Body,
+	}
+	err = s.db.Create(&post).Error
+	return
 }
 
-func (s service) Update() {
-	panic("implement me")
+func (s service) Update(id string, req UpdateRequest) (post entity.Post, err error) {
+	post, err = s.Get(id)
+	if err != nil {
+		return
+	}
+	post.Title = req.Title
+	post.Body = req.Body
+	s.db.Save(&post)
+	return
 }
 
-func (s service) Delete() {
-	panic("implement me")
+func (s service) Delete(id string) (post entity.Post, err error) {
+	post, err = s.Get(id)
+	if err != nil {
+		return
+	}
+	s.db.Delete(&post)
+	return
 }
 
-func NewService(db *database.DB) Service  {
+func NewService(db *database.DB) Service {
 	return service{db}
 }

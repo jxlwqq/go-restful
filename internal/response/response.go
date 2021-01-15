@@ -12,7 +12,7 @@ type Response struct {
 	Data    interface{} `json:"data"`
 }
 
-func New(w http.ResponseWriter, data interface{}, status int) http.ResponseWriter {
+func Write(w http.ResponseWriter, data interface{}, status int) http.ResponseWriter {
 	w.WriteHeader(status)
 	res := Response{
 		Code:    status,
@@ -39,7 +39,7 @@ func CodeText(code int) string {
 	return codeText[code]
 }
 
-func NewWithCode(w http.ResponseWriter, data interface{}, code int, message string) http.ResponseWriter {
+func WriteWithCode(w http.ResponseWriter, data interface{}, code int, message string) http.ResponseWriter {
 	if message == "" {
 		message = CodeText(code)
 	}

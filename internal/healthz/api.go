@@ -6,10 +6,10 @@ import (
 	"net/http"
 )
 
-func RegisterHandlers(r *mux.Router)  {
+func RegisterHandlers(r *mux.Router) {
 	r.HandleFunc("/healthz", Healthz)
 }
 
-func Healthz(w http.ResponseWriter, r *http.Request)  {
-	response.New(w, nil, http.StatusOK)
+func Healthz(w http.ResponseWriter, r *http.Request) {
+	response.Write(w, nil, http.StatusOK)
 }

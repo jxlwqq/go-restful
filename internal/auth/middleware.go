@@ -24,14 +24,14 @@ func (m middleware) Handler(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		token := r.Header.Get("Authorization")
 		if len(token) == 0 {
-			response.New(w, nil, http.StatusUnauthorized)
+			response.Write(w, nil, http.StatusUnauthorized)
 			return
 		}
 
 		token = strings.Replace(token, "Bearer ", "", 1)
 		claims, err := m.verifyToken(token)
 		if err != nil {
-			response.New(w, nil, http.StatusUnauthorized)
+			response.Write(w, nil, http.StatusUnauthorized)
 			return
 		}
 
