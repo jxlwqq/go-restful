@@ -14,7 +14,7 @@ import (
 
 func main() {
 
-	cfg, _ := config.Load()
+	cfg, _ := config.Load("./configs/.env")
 	if cfg == nil {
 		os.Exit(-1)
 	}

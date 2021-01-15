@@ -21,12 +21,12 @@ type Config struct {
 	JWTExpiration int `yaml:"jwt_expiration" env:"JWT_EXPIRATION"`
 }
 
-func Load() (*Config, error) {
+func Load(filename string) (*Config, error) {
 	c := Config{
 		ServerPort:    defaultServerPort,
 		JWTExpiration: defaultJWTExpirationHours,
 	}
-	_ = godotenv.Load("./configs/.env")
+	_ = godotenv.Load(filename)
 	c.DSN = os.Getenv("DSN")
 	c.JWTSigningKey = os.Getenv("JWT_SIGNING_KEY")
 

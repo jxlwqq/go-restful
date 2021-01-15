@@ -13,7 +13,7 @@ import (
 func RegisterHandlers(r *mux.Router, db *database.DB, logger *log.Logger, cfg *config.Config) {
 	svc := NewService(cfg.JWTSigningKey, cfg.JWTExpiration, db, logger)
 	res := resource{svc, logger}
-	r.HandleFunc("/auth/login", res.login).Methods(http.MethodPost)
+	r.HandleFunc("/auth/login", res.Login).Methods(http.MethodPost)
 }
 
 type resource struct {
@@ -21,7 +21,7 @@ type resource struct {
 	logger  *log.Logger
 }
 
-func (res resource) login(w http.ResponseWriter, r *http.Request) {
+func (res resource) Login(w http.ResponseWriter, r *http.Request) {
 	var req struct {
 		Mobile string `json:"mobile"`
 		Code   string `json:"code"`
