@@ -14,13 +14,14 @@ type Response struct {
 
 func Write(w http.ResponseWriter, data interface{}, status int) http.ResponseWriter {
 	w.WriteHeader(status)
+	header := w.Header()
+	header["Content-Type"] = []string{"application/json; charset=utf-8"}
 	res := Response{
 		Code:    status,
 		Message: http.StatusText(status),
 		Data:    data,
 	}
 	_ = json.NewEncoder(w).Encode(res)
-
 	return w
 }
 
