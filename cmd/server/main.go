@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"github.com/jxlwqq/go-restful/internal/config"
 	"github.com/jxlwqq/go-restful/internal/routes"
@@ -10,6 +11,9 @@ import (
 	"gorm.io/gorm"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
+	"time"
 )
 
 func main() {
@@ -30,5 +34,26 @@ func main() {
 	routes.BuildHandlers(r, db, logger, cfg)
 
 	addr := fmt.Sprintf(":%v", cfg.ServerPort)
-	_ = http.ListenAndServe(addr, r)
+
+	server := &http.Server{
+		Addr:    addr,
+		Handler: r,
+	}
+
+	go func() {
+		if err := server.ListenAndServe(); err != nil {
+			os.Exit(-1)
+		}
+	}()
+
+	quit := make(chan os.Signal)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	logger.Info("Server is shutting down")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := server.Shutdown(ctx); err != nil {
+		logger.Fatal("Server forced to shutdown:", err)
+	}
+	logger.Info("Server exiting")
 }
