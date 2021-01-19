@@ -6,12 +6,11 @@ import (
 )
 
 type User struct {
-	ID        int       `json:"id"`
+	ID        int       `json:"id" gorm:"primaryKey"`
 	Name      string    `json:"name"`
-	Mobile    string    `json:"mobile"`
+	Mobile    string    `json:"mobile" gorm:"unique"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
-	DeletedAt time.Time `json:"deleted_at"`
 }
 
 func (u User) GetID() string {

@@ -10,10 +10,15 @@ import (
 	"net/http"
 )
 
-func RegisterHandlers(r *mux.Router, db *database.DB, logger *log.Logger, cfg *config.Config) {
-	svc := NewService(cfg.JWTSigningKey, cfg.JWTExpiration, db, logger)
-	res := resource{svc, logger}
+func RegisterHandlers(r *mux.Router, db *database.DB, logger *log.Logger, cfg *config.Config, authMiddleware Middleware) {
+	authService := NewService(cfg.JWTSigningKey, cfg.JWTExpiration, db, logger)
+	res := resource{authService, logger}
 	r.HandleFunc("/auth/login", res.Login).Methods(http.MethodPost)
+	s := r.PathPrefix("").Subrouter()
+	s.HandleFunc("/auth/me", res.Me).Methods(http.MethodGet)
+	s.HandleFunc("/auth/logout", res.Logout).Methods(http.MethodPost)
+	s.HandleFunc("/auth/refresh", res.Refresh).Methods(http.MethodPost)
+	s.Use(authMiddleware.Handler)
 }
 
 type resource struct {
@@ -36,3 +41,19 @@ func (res resource) Login(w http.ResponseWriter, r *http.Request) {
 		Token string `json:"token"`
 	}{token}, http.StatusOK)
 }
+
+func (res resource) Me(w http.ResponseWriter, r *http.Request)  {
+	id := r.Header.Get("id")
+	user, _ := res.service.Me(id)
+	response.Write(w, user, http.StatusOK)
+}
+
+func (res resource) Logout(w http.ResponseWriter, r *http.Request)  {
+	// todo
+}
+
+func (res resource) Refresh (w http.ResponseWriter, r *http.Request) {
+	// todo
+}
+
+

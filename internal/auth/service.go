@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/jxlwqq/go-restful/internal/entity"
 	"github.com/jxlwqq/go-restful/pkg/database"
@@ -11,7 +10,8 @@ import (
 
 type Service interface {
 	Login(args ...interface{}) (string, error)
-	generateToken(identity Identity) (string, error)
+	Me(id string) (Identity, error)
+	generateToken(Identity) (string, error)
 }
 
 func NewService(signingKey string, tokenExpiration int, db *database.DB, logger *log.Logger) Service {
@@ -27,14 +27,18 @@ type service struct {
 
 func (s service) Login(args ...interface{}) (string, error) {
 	mobile := args[0].(string)
-	code := args[1].(string)
-	fmt.Print(mobile)
-	if mobile == "demo" && code == "1234" {
-		user := entity.User{ID: 100, Name: "demo"}
-		return s.generateToken(user)
+	// todo 检测code是否存在或过期
+	user := entity.User{
+		Mobile: mobile,
 	}
+	s.db.FirstOrCreate(&user)
+	return s.generateToken(user)
+}
 
-	return "", nil
+func (s service) Me(id string) (Identity, error)  {
+	user := entity.User{}
+	err := s.db.Find(&user, id).Error
+	return user, err
 }
 
 type Identity interface {

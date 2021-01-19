@@ -13,6 +13,6 @@ import (
 func BuildHandlers(r *router.Router, db *database.DB, logger *log.Logger, cfg *config.Config) {
 	authMiddleware := auth.NewMiddleware(cfg.JWTSigningKey)
 	post.RegisterHandlers(r.PathPrefix("").Subrouter(), db, logger, authMiddleware)
-	auth.RegisterHandlers(r.PathPrefix("").Subrouter(), db, logger, cfg)
+	auth.RegisterHandlers(r.PathPrefix("").Subrouter(), db, logger, cfg, authMiddleware)
 	healthz.RegisterHandlers(r.PathPrefix("").Subrouter())
 }
