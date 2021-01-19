@@ -4,7 +4,7 @@
 * [gorilla/mux](https://github.com/gorilla/mux) Router
 * [go-gorm/gorm](https://github.com/go-gorm/gorm) ORM
 * [dgrijalva/jwt-go](https://github.com/dgrijalva/jwt-go) JWT
-* [joho/godotenv](https://github.com/joho/godotenv) ENV
+* [spf13/viper](https://github.com/spf13/viper) Config
 * [stretchr/testify](https://github.com/stretchr/testify) Testing
 * [uber-go/zap](https://github.com/uber-go/zap) Logger
 
