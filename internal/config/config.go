@@ -1,8 +1,7 @@
 package config
 
 import (
-	"github.com/joho/godotenv"
-	"os"
+	"github.com/spf13/viper"
 )
 
 const (
@@ -11,7 +10,7 @@ const (
 )
 
 type Config struct {
-	// the server port. Defaults to 8080
+	// the server port. Defaults to 8081
 	ServerPort int `yaml:"server_port" env:"SERVER_PORT"`
 	// the data source name (DSN) for connecting to the database. required.
 	DSN string `yaml:"dsn" env:"DSN,secret"`
@@ -21,14 +20,15 @@ type Config struct {
 	JWTExpiration int `yaml:"jwt_expiration" env:"JWT_EXPIRATION"`
 }
 
-func Load(filename string) (*Config, error) {
+func Load(file string) (*Config, error) {
 	c := Config{
 		ServerPort:    defaultServerPort,
 		JWTExpiration: defaultJWTExpirationHours,
 	}
-	_ = godotenv.Load(filename)
-	c.DSN = os.Getenv("DSN")
-	c.JWTSigningKey = os.Getenv("JWT_SIGNING_KEY")
-
+	viper.AutomaticEnv()
+	viper.SetConfigFile(file)
+	_ = viper.ReadInConfig()
+	c.DSN = viper.GetString("DSN")
+	c.JWTSigningKey = viper.GetString("JWT_SIGNING_KEY")
 	return &c, nil
 }
