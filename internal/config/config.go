@@ -23,15 +23,16 @@ type Config struct {
 }
 
 func Load(file string) (*Config, error) {
-	c := Config{
-		ServerPort:    defaultServerPort,
-		JWTExpiration: defaultJWTExpirationHours,
-	}
+	var c Config
+	viper.SetDefault("SERVER_PORT", defaultServerPort)
+	viper.SetDefault("JWT_EXPIRATION", defaultJWTExpirationHours)
 	viper.AutomaticEnv()
 	viper.SetConfigFile(file)
 	_ = viper.ReadInConfig()
+	c.ServerPort = viper.GetInt("SERVER_PORT")
 	c.DSN = viper.GetString("DSN")
 	c.JWTSigningKey = viper.GetString("JWT_SIGNING_KEY")
+	c.JWTExpiration = viper.GetInt("JWT_EXPIRATION")
 	c.RedisAddress = viper.GetString("REDIS_ADDRESS")
 	return &c, nil
 }

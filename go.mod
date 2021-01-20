@@ -4,7 +4,7 @@ go 1.15
 
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/go-redis/redis/v8 v8.4.9 // indirect
+	github.com/go-redis/redis/v8 v8.4.9
 	github.com/gorilla/mux v1.8.0
 	github.com/spf13/viper v1.7.1
 	github.com/stretchr/testify v1.7.0
