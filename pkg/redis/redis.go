@@ -9,9 +9,9 @@ type Redis struct {
 	*redis.Client
 }
 
-func New(cfg *config.Config) *Redis  {
+func New(cfg *config.Config) *Redis {
 	client := redis.NewClient(&redis.Options{
-		Addr:     cfg.RedisAddress,
+		Addr: cfg.RedisAddress,
 	})
 
 	return &Redis{client}

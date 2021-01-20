@@ -37,14 +37,14 @@ func TestAPI(t *testing.T) {
 	assert.NotEmpty(t, res.Data.Token)
 
 	request2 := httptest.NewRequest(http.MethodGet, "/auth/me", nil)
-	request2.Header.Add("Authorization", "Bearer " + res.Data.Token)
+	request2.Header.Add("Authorization", "Bearer "+res.Data.Token)
 	recorder2 := httptest.NewRecorder()
 	resource.Me(recorder2, request2)
 	assert.Equal(t, recorder2.Code, http.StatusOK)
 	res2 := struct {
-		Code    int    `json:"code"`
-		Message string `json:"message"`
-		Data entity.User `json:"data"`
+		Code    int         `json:"code"`
+		Message string      `json:"message"`
+		Data    entity.User `json:"data"`
 	}{}
 	_ = json.NewDecoder(recorder2.Body).Decode(&res2)
 	assert.Equal(t, res2.Code, http.StatusOK)

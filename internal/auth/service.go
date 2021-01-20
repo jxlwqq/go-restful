@@ -35,7 +35,7 @@ func (s service) Login(args ...interface{}) (string, error) {
 	return s.generateToken(user)
 }
 
-func (s service) Me(id string) (Identity, error)  {
+func (s service) Me(id string) (Identity, error) {
 	user := entity.User{}
 	err := s.db.Find(&user, id).Error
 	return user, err

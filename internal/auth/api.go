@@ -42,18 +42,16 @@ func (res resource) Login(w http.ResponseWriter, r *http.Request) {
 	}{token}, http.StatusOK)
 }
 
-func (res resource) Me(w http.ResponseWriter, r *http.Request)  {
+func (res resource) Me(w http.ResponseWriter, r *http.Request) {
 	id := r.Header.Get("id")
 	user, _ := res.service.Me(id)
 	response.Write(w, user, http.StatusOK)
 }
 
-func (res resource) Logout(w http.ResponseWriter, r *http.Request)  {
+func (res resource) Logout(w http.ResponseWriter, r *http.Request) {
 	// todo
 }
 
-func (res resource) Refresh (w http.ResponseWriter, r *http.Request) {
+func (res resource) Refresh(w http.ResponseWriter, r *http.Request) {
 	// todo
 }
-
-
