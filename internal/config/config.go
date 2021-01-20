@@ -18,6 +18,8 @@ type Config struct {
 	JWTSigningKey string `yaml:"jwt_signing_key" env:"JWT_SIGNING_KEY,secret"`
 	// JWT expiration in hours. Defaults to 72 hours (3 days)
 	JWTExpiration int `yaml:"jwt_expiration" env:"JWT_EXPIRATION"`
+	// redis
+	RedisAddress string `yaml:"redis_address" env:"REDIS_ADDRESS"`
 }
 
 func Load(file string) (*Config, error) {
@@ -30,5 +32,6 @@ func Load(file string) (*Config, error) {
 	_ = viper.ReadInConfig()
 	c.DSN = viper.GetString("DSN")
 	c.JWTSigningKey = viper.GetString("JWT_SIGNING_KEY")
+	c.RedisAddress = viper.GetString("REDIS_ADDRESS")
 	return &c, nil
 }

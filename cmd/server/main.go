@@ -30,6 +30,7 @@ func main() {
 		os.Exit(-1)
 	}
 
+
 	r := router.New()
 	routes.BuildHandlers(r, db, logger, cfg)
 
