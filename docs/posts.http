@@ -1,4 +1,10 @@
-GET http://localhost:8081/posts/
-Accept: application/json
+POST http://localhost:8081/posts
+Content-Type: application/json
+Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTE0NjAyNjEsImlkIjoiMSIsIm5hbWUiOiIifQ.ax8tYE3HCtjudyXQcLbMGImyi0NjxZa44gWyHNrYkNI"
+{"title": "This is a title", "body": "This is a body"}
+
+###
+GET http://localhost:8081/posts
+Content-Type: application/json
 
 ###

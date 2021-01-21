@@ -3,6 +3,7 @@ package post
 import (
 	"github.com/jxlwqq/go-restful/internal/entity"
 	"github.com/jxlwqq/go-restful/pkg/database"
+	"gorm.io/gorm"
 )
 
 type Service interface {
@@ -12,6 +13,7 @@ type Service interface {
 	Create(req CreateRequest) (entity.Post, error)
 	Update(id string, req UpdateRequest) (entity.Post, error)
 	Delete(id string) (entity.Post, error)
+	IncrementViewCount(post entity.Post) error
 }
 
 type CreateRequest struct {
@@ -72,6 +74,11 @@ func (s service) Delete(id string) (post entity.Post, err error) {
 		return
 	}
 	s.db.Delete(&post)
+	return
+}
+
+func (s service) IncrementViewCount(post entity.Post) (err error) {
+	err = s.db.Model(&post).Update("view_count", gorm.Expr("view_count + ?", 1)).Error
 	return
 }
 

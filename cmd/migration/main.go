@@ -10,5 +10,8 @@ import (
 func main() {
 	cfg, _ := config.Load("./configs/.env")
 	db, _ := database.New(cfg.DSN, &gorm.Config{})
-	_ = db.AutoMigrate(entity.User{}, entity.Post{})
+	_ = db.AutoMigrate(
+		entity.User{},
+		entity.Post{},
+	)
 }
