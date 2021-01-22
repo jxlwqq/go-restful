@@ -9,7 +9,7 @@ import (
 
 type Middleware interface {
 	Handler(next http.Handler) http.Handler
-	verifyToken(string) (jwt.Claims, error)
+	VerifyToken(string) (jwt.Claims, error)
 }
 
 type middleware struct {
@@ -29,7 +29,7 @@ func (m middleware) Handler(next http.Handler) http.Handler {
 		}
 
 		token = strings.Replace(token, "Bearer ", "", 1)
-		claims, err := m.verifyToken(token)
+		claims, err := m.VerifyToken(token)
 		if err != nil {
 			response.Write(w, nil, http.StatusUnauthorized)
 			return
@@ -45,7 +45,7 @@ func (m middleware) Handler(next http.Handler) http.Handler {
 	})
 }
 
-func (m middleware) verifyToken(t string) (jwt.Claims, error) {
+func (m middleware) VerifyToken(t string) (jwt.Claims, error) {
 	token, err := jwt.Parse(t, func(token *jwt.Token) (interface{}, error) {
 		return m.signingKey, nil
 	})
